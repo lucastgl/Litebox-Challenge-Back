@@ -56,4 +56,3 @@ export class PostsService {
     return this.relatedPostsService.createRelatedPost(createRelatedPostDto);
   }
 }
-

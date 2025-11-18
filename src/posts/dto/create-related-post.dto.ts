@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsUrl, ValidateIf } from 'class-validator';
+import { IsString, IsNotEmpty, Matches } from 'class-validator';
 
 /**
  * DTO para crear un nuevo post relacionado
@@ -14,12 +14,17 @@ export class CreateRelatedPostDto {
   title: string;
 
   /**
-   * URL de la imagen del post relacionado
-   * Debe ser una URL válida si se proporciona
+   * URL de la imagen del post relacionado o data URL (base64)
+   * Acepta URLs HTTP/HTTPS o data URLs (data:image/...)
    */
   @IsString()
-  @IsUrl({}, { message: 'La imagen debe ser una URL válida' })
   @IsNotEmpty({ message: 'La imagen es requerida' })
+  @Matches(
+    /^(https?:\/\/.+|data:image\/(jpeg|jpg|png);base64,.+)$/,
+    {
+      message: 'La imagen debe ser una URL válida o una data URL (base64)',
+    },
+  )
   image: string;
 }
 

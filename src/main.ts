@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
+import { json } from 'express';
 
 /**
  * Función principal que inicializa la aplicación NestJS
@@ -8,6 +9,10 @@ import { AppModule } from './app.module';
  */
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Configurar el límite del body parser para permitir imágenes en base64
+  // 50MB debería ser suficiente para imágenes grandes en base64
+  app.use(json({ limit: '50mb' }));
 
   // Habilitar CORS para permitir peticiones desde el frontend
   app.enableCors({

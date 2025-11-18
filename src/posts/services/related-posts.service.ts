@@ -21,7 +21,7 @@ export class RelatedPostsService {
    * @param createRelatedPostDto - DTO con los datos del post a crear (título e imagen)
    * @returns El post relacionado creado con su ID y fecha de creación
    */
-  async createRelatedPost(
+  createRelatedPost(
     createRelatedPostDto: CreateRelatedPostDto,
   ): Promise<RelatedPostResponseDto> {
     const newPost: RelatedPostResponseDto = {
@@ -32,17 +32,19 @@ export class RelatedPostsService {
     };
 
     this.relatedPosts.push(newPost);
-    return newPost;
+    return Promise.resolve(newPost);
   }
 
   /**
    * Obtiene todos los posts relacionados almacenados
    * @returns Array con todos los posts relacionados, ordenados por fecha de creación (más recientes primero)
    */
-  async getAllRelatedPosts(): Promise<RelatedPostResponseDto[]> {
+  getAllRelatedPosts(): Promise<RelatedPostResponseDto[]> {
     // Ordenar por fecha de creación descendente (más recientes primero)
-    return [...this.relatedPosts].sort(
-      (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+    return Promise.resolve(
+      [...this.relatedPosts].sort(
+        (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+      ),
     );
   }
 
@@ -51,8 +53,9 @@ export class RelatedPostsService {
    * @param id - ID del post relacionado
    * @returns El post relacionado si existe, null en caso contrario
    */
-  async getRelatedPostById(id: number): Promise<RelatedPostResponseDto | null> {
-    return this.relatedPosts.find((post) => post.id === id) || null;
+  getRelatedPostById(id: number): Promise<RelatedPostResponseDto | null> {
+    return Promise.resolve(
+      this.relatedPosts.find((post) => post.id === id) || null,
+    );
   }
 }
-
