@@ -59,6 +59,7 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 **/firebase-service-account.json
 **/*firebase-adminsdk*.json
 src/config/firebase-service-account.json
+dbliteboxchallenge-firebase-adminsdk-fbsvc-8054602862.json
 
 # JSON Server (ya no se usa)
 db.json
