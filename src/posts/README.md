@@ -1,18 +1,17 @@
 # Módulo de Posts
 
-Este módulo gestiona todas las operaciones relacionadas con posts, incluyendo la integración con la API externa de Litebox y la gestión de posts relacionados.
+Este módulo gestiona las operaciones relacionadas con posts de la API externa de Litebox.
+
+**Nota:** Los posts relacionados (creados desde el modal) se gestionan en el módulo `posts-related` que utiliza Firebase Firestore.
 
 ## Estructura del Módulo
 
 ```
 posts/
 ├── dto/                          # Data Transfer Objects
-│   ├── post-response.dto.ts      # DTOs para respuestas de la API externa
-│   ├── create-related-post.dto.ts # DTO para crear posts relacionados
-│   └── related-post-response.dto.ts # DTO para respuestas de posts relacionados
+│   └── post-response.dto.ts      # DTOs para respuestas de la API externa
 ├── services/                      # Servicios especializados
-│   ├── external-api.service.ts   # Servicio para consumir la API externa
-│   └── related-posts.service.ts  # Servicio para gestionar posts relacionados
+│   └── external-api.service.ts   # Servicio para consumir la API externa
 ├── posts.controller.ts           # Controlador HTTP
 ├── posts.service.ts              # Servicio principal (lógica de negocio)
 └── posts.module.ts               # Módulo NestJS
@@ -82,45 +81,6 @@ Obtiene el detalle de un post específico por su ID.
 }
 ```
 
-### 3. GET /api/posts/related
-Obtiene el listado de posts relacionados almacenados localmente (los que se cargan desde el modal).
-
-**Respuesta:**
-```json
-[
-  {
-    "id": 1,
-    "title": "Título del post relacionado",
-    "image": "https://example.com/image.jpg",
-    "createdAt": "2025-01-20T10:00:00.000Z"
-  }
-]
-```
-
-### 4. POST /api/posts/related
-Crea un nuevo post relacionado con título e imagen.
-
-**Body:**
-```json
-{
-  "title": "Título del post",
-  "image": "https://example.com/image.jpg"
-}
-```
-
-**Validaciones:**
-- `title`: Requerido, debe ser una cadena no vacía
-- `image`: Requerido, debe ser una URL válida
-
-**Respuesta:**
-```json
-{
-  "id": 1,
-  "title": "Título del post",
-  "image": "https://example.com/image.jpg",
-  "createdAt": "2025-01-20T10:00:00.000Z"
-}
-```
 
 ## Capas de la Arquitectura
 
@@ -141,10 +101,7 @@ Crea un nuevo post relacionado con título e imagen.
 - Maneja errores HTTP y transforma respuestas
 - Proporciona métodos para obtener posts y detalles
 
-#### RelatedPostsService
-- Gestiona los posts relacionados almacenados localmente
-- Actualmente usa almacenamiento en memoria (en producción debería usar una base de datos)
-- Proporciona métodos para crear y listar posts relacionados
+**Nota:** Los posts relacionados se gestionan en el módulo `posts-related` que utiliza Firebase Firestore.
 
 ### 4. DTOs (Data Transfer Objects)
 - Definen la estructura de datos para requests y responses
@@ -153,22 +110,18 @@ Crea un nuevo post relacionado con título e imagen.
 
 ## Notas de Implementación
 
-1. **Almacenamiento de Posts Relacionados**: Actualmente se almacenan en memoria. En producción, se recomienda usar una base de datos (PostgreSQL, MongoDB, etc.).
+1. **Manejo de Errores**: Los errores de la API externa se capturan y se transforman en excepciones HTTP apropiadas.
 
-2. **Manejo de Errores**: Los errores de la API externa se capturan y se transforman en excepciones HTTP apropiadas.
+2. **Validación**: Se utiliza `ValidationPipe` global para validar automáticamente todos los DTOs.
 
-3. **Validación**: Se utiliza `ValidationPipe` global para validar automáticamente todos los DTOs.
+3. **CORS**: Está habilitado para permitir peticiones desde el frontend. En producción, se debe especificar los orígenes permitidos mediante la variable de entorno `ALLOWED_ORIGINS`.
 
-4. **CORS**: Está habilitado para permitir peticiones desde el frontend. En producción, se debe especificar los orígenes permitidos.
-
-5. **Orden de Rutas**: La ruta `/api/posts/related` debe estar antes de `/api/posts/:id` para evitar conflictos de routing.
+4. **Posts Relacionados**: Los posts relacionados (creados desde el modal) se gestionan en el módulo `posts-related` que utiliza Firebase Firestore. Ver documentación en `src/posts-related/`.
 
 ## Próximos Pasos
 
-- [ ] Integrar una base de datos para almacenar posts relacionados
 - [ ] Agregar autenticación y autorización
 - [ ] Implementar caché para las peticiones a la API externa
 - [ ] Agregar tests unitarios y de integración
-- [ ] Implementar paginación para posts relacionados
 - [ ] Agregar logging y monitoreo
 

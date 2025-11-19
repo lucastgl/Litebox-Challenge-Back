@@ -54,3 +54,22 @@ pids
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Firebase service account credentials
+**/firebase-service-account.json
+**/*firebase-adminsdk*.json
+src/config/firebase-service-account.json
+
+# JSON Server (ya no se usa)
+db.json
+
+# Archivos de configuración de Firebase (documentación)
+FIREBASE_SETUP.md
+STORAGE_SETUP.md
+SDK_CLARIFICATION.md
+FIRESTORE_RULES.md
+
+# Credenciales y archivos sensibles
+CREDENTIALS-BACK.txt
+*.env
+.env.*
